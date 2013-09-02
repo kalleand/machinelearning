@@ -33,3 +33,9 @@ nosetests.xml
 .mr.developer.cfg
 .project
 .pydevproject
+
+# Lab descriptions
+*.pdf
+
+# Supplied files
+decisiontrees/dectrees-py/
