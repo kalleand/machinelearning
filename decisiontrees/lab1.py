@@ -1,4 +1,5 @@
 import sys
+import random
 sys.path.append('dectrees-py/')
 import monkdata as monk
 import dtree as dt
@@ -38,9 +39,67 @@ for i in range(1, 5):
     #monk.attributes[1], 1)))
 
 # Building the decision tree.
-t = dt.buildTree(monk.monk1, monk.attributes)
+tree1 = dt.buildTree(monk.monk1, monk.attributes)
+tree2 = dt.buildTree(monk.monk2, monk.attributes)
+tree3 = dt.buildTree(monk.monk3, monk.attributes)
 # Drawing the decision tree.
-#drawtree.drawTree(t)
+#drawtree.drawTree(tree)
 
 print()
-print(dt.check(t, monk.monk1test))
+datasets = [monk.monk1, monk.monk1test, monk.monk2, monk.monk2test, monk.monk3, monk.monk3test]
+trees = [tree1, tree2, tree3]
+for i in range(1, 4):
+    tree = trees[i - 1]
+    dataset1 = datasets[(i - 1) * 2]
+    dataset2 = datasets[(i - 1) * 2 + 1]
+    print("Error for Monk{} on train = {} and on test {}.".format(i, dt.check(tree, dataset1), dt.check(tree, dataset2)))
+
+
+def partition(data, fraction):
+    ldata = list(data)
+    random.shuffle(ldata)
+    breakpoint = int(len(ldata) * fraction)
+    return ldata[:breakpoint], ldata[breakpoint:]
+
+
+print()
+
+for i in [0.3, 0.4, 0.5, 0.6, 0.7, 0.8]:
+    #Creating the test and evaluation sets for monk1 and monk3
+    monk1train, monk1val = partition(monk.monk1, i)
+    monk3train, monk3val = partition(monk.monk3, i)
+
+    # Building the original decisiontrees.
+    ptree1 = dt.buildTree(monk1train, monk.attributes)
+    ptree3 = dt.buildTree(monk3train, monk.attributes)
+
+    # Creating every possible pruned version of the tree.
+    pruned1 = dt.allPruned(ptree1)
+    pruned3 = dt.allPruned(ptree3)
+
+    # Getting the unpruned value.
+    check1 = dt.check(ptree1, monk1val)
+    check3 = dt.check(ptree3, monk1val)
+
+    maxVal = check1
+    maxTree = ptree1
+
+    for pTree in pruned1:
+        temp = dt.check(pTree, monk1val)
+        if temp >= maxVal:
+            maxVal = temp
+            maxTree = pTree
+
+    print()
+    print("Pruning on monk{} with fraction {} gives best performance = {} and without pruning = {}.".format(1, i, dt.check(maxTree, monk.monk1test), dt.check(tree1, monk.monk1test))) 
+    maxVal = check3
+    maxTree = ptree3
+
+    for pTree in pruned3:
+        temp = dt.check(pTree, monk1val)
+        if temp >= maxVal:
+            maxVal = temp
+            maxTree = pTree
+
+    print("Pruning on monk{} with fraction {} gives best performance = {} and without pruning = {}.".format(3, i, dt.check(maxTree, monk.monk3test), dt.check(tree3, monk.monk3test))) 
+
