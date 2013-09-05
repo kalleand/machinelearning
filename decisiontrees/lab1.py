@@ -73,9 +73,6 @@ for i in [0.3, 0.4, 0.5, 0.6, 0.7, 0.8]:
     ptree1 = dt.buildTree(monk1train, monk.attributes)
     ptree3 = dt.buildTree(monk3train, monk.attributes)
 
-    # Creating every possible pruned version of the tree.
-    pruned3 = dt.allPruned(ptree3)
-
     # Default values are using the unpruned tree
     maxVal = dt.check(ptree1, monk1val)
     maxTree = ptree1
