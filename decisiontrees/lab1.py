@@ -74,32 +74,48 @@ for i in [0.3, 0.4, 0.5, 0.6, 0.7, 0.8]:
     ptree3 = dt.buildTree(monk3train, monk.attributes)
 
     # Creating every possible pruned version of the tree.
-    pruned1 = dt.allPruned(ptree1)
     pruned3 = dt.allPruned(ptree3)
 
-    # Getting the unpruned value.
-    check1 = dt.check(ptree1, monk1val)
-    check3 = dt.check(ptree3, monk1val)
-
-    maxVal = check1
+    # Default values are using the unpruned tree
+    maxVal = dt.check(ptree1, monk1val)
     maxTree = ptree1
 
-    for pTree in pruned1:
-        temp = dt.check(pTree, monk1val)
-        if temp >= maxVal:
-            maxVal = temp
-            maxTree = pTree
+    # Calculating the best pruned tree for monk1.
+    currentBase = ptree1
+    oldVal = 0
+    while dt.check(currentBase, monk1val) > oldVal:
+        maxVal = dt.check(currentBase, monk1val)
+        oldVal = maxVal
+        maxTree = currentBase
+        for pTree in dt.allPruned(currentBase):
+            temp = dt.check(pTree, monk1val)
+            if temp >= maxVal:
+                maxVal = temp
+                maxTree = pTree
+        currentBase = maxTree
 
+    # Print result.
     print()
-    print("Pruning on monk{} with fraction {} gives best performance = {} and without pruning = {}.".format(1, i, dt.check(maxTree, monk.monk1test), dt.check(tree1, monk.monk1test))) 
-    maxVal = check3
+    print("Pruning on monk{} with fraction {} gives best performance = {} and without pruning = {}.".format(1, i, dt.check(maxTree, monk.monk1test), dt.check(tree1, monk.monk1test)))
+
+    # Default values are using the unpruned tree
+    maxVal = dt.check(ptree3, monk1val)
     maxTree = ptree3
 
-    for pTree in pruned3:
-        temp = dt.check(pTree, monk1val)
-        if temp >= maxVal:
-            maxVal = temp
-            maxTree = pTree
+    # Calculating the best pruned tree for monk3.
+    currentBase = ptree3
+    oldVal = 0
+    while dt.check(currentBase, monk3val) > oldVal:
+        maxVal = dt.check(currentBase, monk3val)
+        oldVal = maxVal
+        maxTree = currentBase
+        for pTree in dt.allPruned(currentBase):
+            temp = dt.check(pTree, monk3val)
+            if temp >= maxVal:
+                maxVal = temp
+                maxTree = pTree
+        currentBase = maxTree
 
-    print("Pruning on monk{} with fraction {} gives best performance = {} and without pruning = {}.".format(3, i, dt.check(maxTree, monk.monk3test), dt.check(tree3, monk.monk3test))) 
+    # Print result.
+    print("Pruning on monk{} with fraction {} gives best performance = {} and without pruning = {}.".format(3, i, dt.check(maxTree, monk.monk3test), dt.check(tree3, monk.monk3test)))
 
