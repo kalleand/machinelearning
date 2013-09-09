@@ -16,7 +16,7 @@ test =[monk.monk1test, monk.monk2test, monk.monk3test]
 print("Entropy for monk1 dataset is {}".format(dt.entropy(monk.monk1)))
 print("Entropy for monk2 dataset is {}".format(dt.entropy(monk.monk2)))
 print("Entropy for monk3 dataset is {}".format(dt.entropy(monk.monk3)))
-print()
+print("")
 
 for i, dataset in enumerate(train):
     print("Average gain for monk{} for each attribute".format(i))
@@ -27,7 +27,7 @@ for i, dataset in enumerate(train):
 
 monk1a5 = [dt.select(monk.monk1, monk.attributes[4], 1), dt.select(monk.monk1, monk.attributes[4], 2), dt.select(monk.monk1, monk.attributes[4], 3), dt.select(monk.monk1, monk.attributes[4], 4)]
 for i, monk1 in enumerate(monk1a5):
-    print()
+    print("")
     print("Average gain for monk1 where a5 = {} for each attribute".format(i))
     print("a1 = {0}, a2 = {1}, a3 = {2}, a4 = {3}, a6 = {4}".format(
         dt.averageGain(monk1, monk.attributes[0]), dt.averageGain(monk1, monk.attributes[1]),
@@ -45,7 +45,7 @@ trees = [tree1, tree2, tree3]
 # Drawing the decision tree.
 #drawtree.drawTree(tree)
 
-print()
+print("")
 for i, (dataset1, dataset2, tree) in enumerate(zip(train, test, trees)):
     print("Error for Monk{} on train = {} and on test {}.".format(i, dt.check(tree, dataset1), dt.check(tree, dataset2)))
 
@@ -71,8 +71,6 @@ def prune(pruned_tree, test_tree):
                 maxTree = pTree
         currentBase = maxTree
     return maxTree
-
-print()
 
 fractions = [0.3, 0.4, 0.5, 0.6, 0.7, 0.8]
 ax = plt.subplot(1, 1, 1)
@@ -110,7 +108,7 @@ for frac in fractions:
     monk3Pruned.append(val3)
 
     # Print result.
-    print()
+    print("")
     print("Pruning on monk{} with fraction {} gives best performance = {} and \
 without pruning = {}.".format(1, frac, val1, dt.check(tree1, monk.monk1test)))
     print("Pruning on monk{} with fraction {} gives best performance = {} and\
