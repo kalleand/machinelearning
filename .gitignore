@@ -39,3 +39,6 @@ nosetests.xml
 
 # Supplied files
 decisiontrees/dectrees-py/
+
+# Images
+*.png
