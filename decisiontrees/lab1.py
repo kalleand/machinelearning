@@ -56,16 +56,16 @@ def partition(data, fraction):
     breakpoint = int(len(ldata) * fraction)
     return ldata[:breakpoint], ldata[breakpoint:]
 
-def prune(tree):
-    currentBase = tree
+def prune(pruned_tree, test_tree):
+    currentBase = pruned_tree
     oldVal = 0
     maxVal = 1
     while maxVal > oldVal:
-        maxVal = dt.check(currentBase, monk1val)
+        maxVal = dt.check(currentBase, test_tree)
         oldVal = maxVal
         maxTree = currentBase
         for pTree in dt.allPruned(currentBase):
-            temp = dt.check(pTree, monk1val)
+            temp = dt.check(pTree, test_tree)
             if temp > maxVal:
                 maxVal = temp
                 maxTree = pTree
@@ -81,9 +81,13 @@ monk3Pruned = []
 
 for frac in fractions:
 
+    # Initializes values for the average scores.
     val1 = 0
     val3 = 0
-    number_of_iterations = 25
+
+    # Variable for easy handling of iterations.
+    number_of_iterations = 100
+
     for it in range(number_of_iterations):
         #Creating the test and evaluation sets for monk1 and monk3
         monk1train, monk1val = partition(monk.monk1, frac)
@@ -94,12 +98,14 @@ for frac in fractions:
         ptree3 = dt.buildTree(monk3train, monk.attributes)
 
         # Pruning
-        val1 += dt.check(prune(ptree1), monk.monk1test)
-        val3 += dt.check(prune(ptree3), monk.monk3test)
+        val1 += dt.check(prune(ptree1, monk1val), monk.monk1test)
+        val3 += dt.check(prune(ptree3, monk3val), monk.monk3test)
 
+    # Get the average score.
     val1 /= number_of_iterations
     val3 /= number_of_iterations
 
+    # Saves this value.
     monk1Pruned.append(val1)
     monk3Pruned.append(val3)
 
