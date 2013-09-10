@@ -11,7 +11,7 @@ import dtree as dt
 
 # Datasets
 train = [monk.monk1, monk.monk2, monk.monk3]
-test =[monk.monk1test, monk.monk2test, monk.monk3test]
+test = [monk.monk1test, monk.monk2test, monk.monk3test]
 
 print("Entropy for monk1 dataset is {}".format(dt.entropy(monk.monk1)))
 print("Entropy for monk2 dataset is {}".format(dt.entropy(monk.monk2)))
