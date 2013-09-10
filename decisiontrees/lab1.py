@@ -24,9 +24,6 @@ for i, dataset in enumerate(train):
     for j, attribute in enumerate(monk.attributes):
         print("a{} = {}".format(j + 1, dt.averageGain(dataset, attribute)))
 
-# It is pretty clear that a5 is the best for splitting. We gain over 0.2 (does
-# this mean 20% certain?) for this one alone on monk1 and monk3.
-
 monk1a5 = [dt.select(monk.monk1, monk.attributes[4], 1), dt.select(monk.monk1, monk.attributes[4], 2), dt.select(monk.monk1, monk.attributes[4], 3), dt.select(monk.monk1, monk.attributes[4], 4)]
 
 for i, monk1 in enumerate(monk1a5):
