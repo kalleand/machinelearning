@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 sys.path.append('dectrees-py/')
 import monkdata as monk
 import dtree as dt
+
 # Needed import for drawing the decision tree.
 #import drawtree as drawtree
 
@@ -16,23 +17,24 @@ test = [monk.monk1test, monk.monk2test, monk.monk3test]
 print("Entropy for monk1 dataset is {}".format(dt.entropy(monk.monk1)))
 print("Entropy for monk2 dataset is {}".format(dt.entropy(monk.monk2)))
 print("Entropy for monk3 dataset is {}".format(dt.entropy(monk.monk3)))
-print("")
 
 for i, dataset in enumerate(train):
-    print("Average gain for monk{} for each attribute".format(i))
-    print("a1 = {0}, a2 = {1}, a3 = {2}, a4 = {3}, a5 = {4}, a6 = {5}".format(dt.averageGain(dataset, monk.attributes[0]), dt.averageGain(dataset, monk.attributes[1]), dt.averageGain(dataset, monk.attributes[2]), dt.averageGain(dataset, monk.attributes[3]), dt.averageGain(dataset, monk.attributes[4]), dt.averageGain(dataset, monk.attributes[5])))
+    print("")
+    print("Average gain for monk{} for each attribute".format(i + 1))
+    for j, attribute in enumerate(monk.attributes):
+        print("a{} = {}".format(j + 1, dt.averageGain(dataset, attribute)))
 
 # It is pretty clear that a5 is the best for splitting. We gain over 0.2 (does
 # this mean 20% certain?) for this one alone on monk1 and monk3.
 
 monk1a5 = [dt.select(monk.monk1, monk.attributes[4], 1), dt.select(monk.monk1, monk.attributes[4], 2), dt.select(monk.monk1, monk.attributes[4], 3), dt.select(monk.monk1, monk.attributes[4], 4)]
+
 for i, monk1 in enumerate(monk1a5):
     print("")
-    print("Average gain for monk1 where a5 = {} for each attribute".format(i))
-    print("a1 = {0}, a2 = {1}, a3 = {2}, a4 = {3}, a6 = {4}".format(
-        dt.averageGain(monk1, monk.attributes[0]), dt.averageGain(monk1, monk.attributes[1]),
-        dt.averageGain(monk1, monk.attributes[2]), dt.averageGain(monk1, monk.attributes[3]),
-        dt.averageGain(monk1, monk.attributes[5])))
+    print("Average gain for monk1 where a5 = {} for each attribute".format(i + 1))
+    for j, attribute in enumerate(monk.attributes):
+        if j != 4:
+            print("a{} = {}".format(j + 1, dt.averageGain(monk1, attribute)))
     print("Majority class = {}".format(dt.mostCommon(monk1)))
 
 
@@ -107,12 +109,15 @@ for frac in fractions:
     monk1Pruned.append(val1)
     monk3Pruned.append(val3)
 
-    # Print result.
+pruned = [monk1Pruned, [], monk3Pruned]
+
+for monk in [1, 3]:
     print("")
-    print("Pruning on monk{} with fraction {} gives best performance = {} and \
-without pruning = {}.".format(1, frac, val1, dt.check(tree1, monk.monk1test)))
-    print("Pruning on monk{} with fraction {} gives best performance = {} and\
-without pruning = {}.".format(3, frac, val3, dt.check(tree3, monk.monk3test)))
+    print("Wihout pruning on monk{} the score is {}".format(monk,
+        dt.check(trees[monk - 1], test[monk - 1])))
+    print("With pruning the score is:")
+    for i, frac in enumerate(fractions):
+        print("{} = {}".format(frac, pruned[monk - 1][i]))
 
 ax.plot(fractions, monk1Pruned, label=("MONK1"))
 ax.plot(fractions, monk3Pruned, label=("MONK3"))
