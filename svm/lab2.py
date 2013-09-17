@@ -7,6 +7,14 @@ POWER = 3
 OMEGA = 2
 DELTA = 0.1
 K = 0.05
+C = 20
+
+# Wrapper for the kernel function to be used. Uncomment the kernel trick.
+def kernel(x, y):
+    #return linear_kernel(x, y)
+    #return polynomial_kernel(x, y)
+    return radial_basis_function_kernel(x, y)
+    #return sigmoid_kernel(x, y)
 
 #############################
 # Generates the datapoints.
@@ -14,10 +22,10 @@ K = 0.05
 # NOTICE: We need to temper with these values for different kernel tricks to
 # make sure it can find an optimal solution. 
 def gen_datapoints_helper():
-    classA = [(random.normalvariate(-1.5, 0.3), random.normalvariate(0.5, 0.3), 1.0)
+    classA = [(random.normalvariate(-1.5, 0.3), random.normalvariate(0.6, 0.5), 1.0)
                 for i in range(5)] + [(random.normalvariate(1.5, 0.3), 
-                random.normalvariate(0.5, 0.3), 1.0) for i in range(5)]
-    classB = [(random.normalvariate(0.0, 0.1), random.normalvariate(-0.5, 0.1), -1.0)
+                random.normalvariate(0.6, 0.5), 1.0) for i in range(5)]
+    classB = [(random.normalvariate(0.0, 0.4), random.normalvariate(0.2, 0.4), -1.0)
                 for i in range(10)]
     return classA, classB
 
@@ -54,12 +62,6 @@ def radial_basis_function_kernel(x, y):
 def sigmoid_kernel(x, y):
     return numpy.tanh(numpy.dot(numpy.multiply(K, x) ,y) + DELTA)
 
-# Wrapper for the kernel function to be used. Uncomment the kernel trick.
-def kernel(x, y):
-    #return linear_kernel(x, y)
-    #return polynomial_kernel(x, y)
-    #return radial_basis_function_kernel(x, y)
-    return sigmoid_kernel(x, y)
 
 # Calculates the value for a specified point in the P matrix.
 def calculate_point(i, j, x, y):
@@ -82,13 +84,17 @@ def gen_q(length):
 
 # Generate h. this is a vector of length N with 0 as its elements.
 def gen_h(length):
-    return numpy.zeros(shape = (length))
+    h = numpy.zeros(shape = (2*length))
+    for i in range(length):
+        h[i+length] = C
+    return h
 
 # Generate G, this is -1 multiplied with the identity matrix of size N.
 def gen_g(length):
-    mat = numpy.zeros(shape = (length, length))
+    mat = numpy.zeros(shape = (2*length, length))
     for i in range(length):
         mat[i][i] = -1
+        mat[i+length][i] = 1
     return mat
 
 # Wrapper for qp where the matrices are converted in the correct way.
