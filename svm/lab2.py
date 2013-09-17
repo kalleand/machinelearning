@@ -3,12 +3,27 @@ from cvxopt.base import matrix
 import numpy , pylab , random , math
 
 EPSILON = 1.0e-5
+POWER = 3
+OMEGA = 2
 
 def linear_kernel(x, y):
     return numpy.dot(x,y) + 1
 
+def polynomial_kernel(x, y):
+    return linear_kernel(x, y)**POWER
+
+def radial_basis_function_kernel(x, y):
+    diff = numpy.subtract(x, y)
+    return math.exp(-(numpy.dot(diff, diff))/(2*OMEGA**2))
+
+def kernel(x, y):
+    return linear_kernel(x, y)
+    #return polynomial_kernel(x, y)
+    #return radial_basis_function_kernel(x, y)
+
+
 def calculate_point(i, j, x, y):
-    return i * j * linear_kernel(x, y)
+    return i * j * kernel(x, y)
 
 def gen_p(datapoints):
     N = len(datapoints)
@@ -20,11 +35,11 @@ def gen_p(datapoints):
     return mat
 
 def gen_datapoints_helper():
-    classA = [(random.normalvariate(-1.5, 0.1), random.normalvariate(0.5, 0.1), 1.0)
+    classA = [(random.normalvariate(-1.5, 0.5), random.normalvariate(0.5, 0.5), 1.0)
                 for i in range(5)]+ \
-                [(random.normalvariate(-1.5, 0.1), random.normalvariate(-0.5, 0.1), 1.0)
+                [(random.normalvariate(1.5, 0.5), random.normalvariate(0.5, 0.5), 1.0)
                 for i in range(5)]
-    classB = [(random.normalvariate(0.0, 0.2), random.normalvariate(-0.5, 0.2), -1.0)
+    classB = [(random.normalvariate(0.0, 0.2), random.normalvariate(0.5, 1.2), -1.0)
                 for i in range(10)]
     return classA, classB
 
@@ -70,7 +85,7 @@ def train(datapoints):
     return ret
 
 def indicator_helper(alpha, t, x_star, x_i):
-    return alpha * t * linear_kernel(x_star, x_i)
+    return alpha * t * kernel(x_star, x_i)
 
 def indicator(train, x, y):
     sum = 0
@@ -80,7 +95,7 @@ def indicator(train, x, y):
 
 def main():
     print("Running main method.")
-    print()
+    print("")
     ############
     # Visualizing the datapoints.
     #
@@ -94,8 +109,8 @@ def main():
                 'ro')
     datapoints = gen_datapoints_from_classes(classA, classB)
     t= train(datapoints)
-    xr=numpy.arange(-4, 4, 0.05)
-    yr=numpy.arange(-4, 4, 0.05)
+    xr=numpy.arange(-4, 6, 0.05)
+    yr=numpy.arange(-4, 6, 0.05)
     grid=matrix([[indicator(t, x, y) for y in yr] for x in xr])
     pylab.contour(xr, yr, grid, (-1.0, 0.0, 1.0), colors=('red', 'black', 'blue'), linewidths=(1, 3, 1))
     pylab.show()
