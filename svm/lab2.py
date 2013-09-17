@@ -2,6 +2,8 @@ from cvxopt.solvers import qp
 from cvxopt.base import matrix
 import numpy , pylab , random , math
 
+EPSILON = 1.0e-5
+
 def linear_kernel(x, y):
     return numpy.dot(x,y) + 1
 
@@ -18,17 +20,22 @@ def gen_p(datapoints):
     return mat
 
 def gen_datapoints_helper():
-    classA = [(random.normalvariate(-1.5, 1), random.normalvariate(0.5, 1), 1.0)
+    classA = [(random.normalvariate(-1.5, 0.1), random.normalvariate(0.5, 0.1), 1.0)
                 for i in range(5)]+ \
-                [(random.normalvariate(1.5, 1), random.normalvariate(0.5, 1), 1.0)
+                [(random.normalvariate(-1.5, 0.1), random.normalvariate(-0.5, 0.1), 1.0)
                 for i in range(5)]
-    classB = [(random.normalvariate(0.0, 0.5), random.normalvariate(-0.5, 0.5), -1.0)
+    classB = [(random.normalvariate(0.0, 0.2), random.normalvariate(-0.5, 0.2), -1.0)
                 for i in range(10)]
     return classA, classB
 
 def gen_datapoints():
     classA, classB = gen_datapoints_helper()
-    data = classA+classB
+    data = classA + classB
+    random.shuffle(data)
+    return data
+
+def gen_datapoints_from_classes(classA, classB):
+    data = classA + classB
     random.shuffle(data)
     return data
 
@@ -49,51 +56,50 @@ def call_qp(P, q, G, h):
     alpha = list(r['x'])
     return alpha
 
-def main():
-    print("Running main method.")
-    print()
-    datapoints = gen_datapoints()
+def train(datapoints):
     length = len(datapoints)
     P = gen_p(datapoints)
-    print(P)
     q = gen_q(length)
     G = gen_g(length)
     h = gen_h(length)
-    print(call_qp(P, q, G, h))
-    
+    l = call_qp(P, q, G, h)
+    ret = []
+    for i,d in zip(l, datapoints):
+        if abs(i) > EPSILON:
+            ret.append((i,d))
+    return ret
 
-    ###########
-    # Printing the generated q-vector.
-    #
-    #print(gen_q(len(datapoints)))
+def indicator_helper(alpha, t, x_star, x_i):
+    return alpha * t * linear_kernel(x_star, x_i)
 
-    ###########
-    # Printing the generated h-vector.
-    #
-    #print(gen_h(len(datapoints)))
+def indicator(train, x, y):
+    sum = 0
+    for alpha, datapoint in train:
+        sum += indicator_helper(alpha, datapoint[2], (x, y), datapoint[0:2])
+    return sum
 
-    ###########
-    # Printing the generated h-vector.
-    #
-    #print(gen_G(len(datapoints)))
-
-    ############
-    # Printing the generated p-matrix.
-    #
-    #print(gen_p(datapoints))
-
+def main():
+    print("Running main method.")
+    print()
     ############
     # Visualizing the datapoints.
     #
-    #classA, classB = gen_datapoints_helper()
-    #pylab.hold(True)
-    #pylab.plot([p[0] for p in classA],
-                #[p[1] for p in classA],
-                #'bo')
-    #pylab.plot([p[0] for p in classB],
-                #[p[1] for p in classB],
-                #'ro')
-    #pylab.show()
+    classA, classB = gen_datapoints_helper()
+    pylab.hold(True)
+    pylab.plot([p[0] for p in classA],
+                [p[1] for p in classA],
+                'bo')
+    pylab.plot([p[0] for p in classB],
+                [p[1] for p in classB],
+                'ro')
+    datapoints = gen_datapoints_from_classes(classA, classB)
+    t= train(datapoints)
+    xr=numpy.arange(-4, 4, 0.05)
+    yr=numpy.arange(-4, 4, 0.05)
+    grid=matrix([[indicator(t, x, y) for y in yr] for x in xr])
+    pylab.contour(xr, yr, grid, (-1.0, 0.0, 1.0), colors=('red', 'black', 'blue'), linewidths=(1, 3, 1))
+    pylab.show()
+
 
 if __name__ == '__main__':
     main()
