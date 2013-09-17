@@ -5,6 +5,8 @@ import numpy , pylab , random , math
 EPSILON = 1.0e-5
 POWER = 3
 OMEGA = 2
+DELTA = 0.1
+K = 2
 
 def linear_kernel(x, y):
     return numpy.dot(x,y) + 1
@@ -16,11 +18,16 @@ def radial_basis_function_kernel(x, y):
     diff = numpy.subtract(x, y)
     return math.exp(-(numpy.dot(diff, diff))/(2*OMEGA**2))
 
+def sigmoid_kernel(x, y):
+    tmp = numpy.tanh(numpy.dot(x,y))
+    print(tmp)
+    return tmp
+
 def kernel(x, y):
-    return linear_kernel(x, y)
+    #return linear_kernel(x, y)
     #return polynomial_kernel(x, y)
     #return radial_basis_function_kernel(x, y)
-
+    return sigmoid_kernel(x, y)
 
 def calculate_point(i, j, x, y):
     return i * j * kernel(x, y)
