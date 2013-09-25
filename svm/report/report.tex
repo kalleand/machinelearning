@@ -32,5 +32,29 @@
 \newpage
 \pagestyle{fancy}
 \setcounter{page}{1}
-\section{TEST}
+\section{Why G is -1 * I}
+In the constraint of equation (12) $G\vec{\alpha}\geq \vec{h}$ this
+gives us that  $-1*I*\vec{\alpha} \geq \vec{h} $. Which implies that $\alpha$ needs to be
+greater than 0, since h is a vector with zeros.
+\section{Kernels}
+\subsection{Linear Kernel}
+This is the most simpel Kernel function, it draws a linear line between the
+datagroups to separate the datapoints. This kernel will fail if no linear
+solution exists and slack is not allowed. 
+
+\subsection{Polynomical Kernel}
+Polynomical is the first non-linear function. It adds a varable $p$
+to the equation that acts as a exponent to the linear kernel. We found that
+$p=3$ is the best power for our dataset. It solves the issue without generating
+too complex solutions.
+
+\subsection{Radial Basis Function Kernel}
+Radial Basis Function is another non-linear kernal. It has the varialbe
+$\sigma$ as a global parameter for tuning the algroithm. We used $10e-5$ for
+$\sigma$ to get a good solution to our dataset.
+
+\subsection{Signoid Kernel}
+This kernel uses $k$ and $\delta$ as global parameters to tune the algorithm. In
+our test, for our data, we found that $k$ should be around 0.05 (1/N) and $\delta$
+should be about 0.1
 \end{document}
