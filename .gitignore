@@ -46,3 +46,6 @@ decisiontrees/dectrees-py/
 
 # Images
 *.png
+
+# Swapfiles because matlab sucks
+*~
