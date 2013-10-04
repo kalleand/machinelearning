@@ -41,8 +41,6 @@ for i = 1:size(data, 1)
     err(class, 2) = err(class, 2) + (data(i,2) - mu(class, 2))^2;
 end
 
-err
-M
 sigma(1,1) = sqrt(err(1,1) / M(1)); % sigma for hand and green
 sigma(1,2) = sqrt(err(1,2) / M(1)); % sigma for hand and red
 sigma(2,1) = sqrt(err(2,1) / M(2)); % sigma for book and green
