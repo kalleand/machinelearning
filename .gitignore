@@ -49,3 +49,4 @@ decisiontrees/dectrees-py/
 
 # Swapfiles because matlab sucks
 *~
+*.swp

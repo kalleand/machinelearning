@@ -4,7 +4,7 @@ function [mu, sigma, p, alpha, classes] = adaboost(data, T)
 % sigma = average distance to average point
 % p = prior
 % alpha = 1/2*ln((1-et)/et) where et is the error in the hypothesis
-% classes = its either fucking one or zero... like always!
+% classes = its either one or zero... like always!
 % data = feature vectors
 % T = number of hypothesis
 M = size(data, 1);
@@ -14,7 +14,7 @@ mu = zeros(C,N,T);
 sigma = zeros(C,N,T);
 p = zeros(C,T);
 alpha = zeros(T, 1);
-classes = [0,1]'; % never used. fuck this.
+classes = [0,1]'; % never used. 
 
 % We initialize the weights to uniform 1/number of points
 weights = zeros(M, T+1);

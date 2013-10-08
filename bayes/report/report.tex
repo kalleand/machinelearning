@@ -45,9 +45,55 @@ $P(D)$ is the evidence.
 i.e. the hypotesis that maximizes the posterior.
 
 \section{Assignment 1}
-See pictures. 
+In this assignment we imlpemented the bayes function that basically calculates
+the average position of the datapoints and the average error for both classes
+(hand/book).
+\\
+\\
+\noindent The end result are shown in the first image where 2 ellipsoids
+can be seen showing the 95\% confidence interval.
+\\
+\\
+\noindent We then implemented the function discriminant that calculates the
+discriminant function for both classes for every datapoint. This translates to
+$g_{m,i}$ being the certainty of the classification of point $m$ to be $c_i$.
+
 \section{Assignment 2}
 
+We then calculated the error and used the result from the bayes and the
+discriminant function to remove the points classified as hand from the image
+containing both the hand and the book. This result can be seen in the second
+image.
 \section{Assingment 3}
 
+In this assignment we extended the bayes function to include weights.
+
+\section{Assignment 4}
+Here we implemented the Adaboost function. For every iteration we are
+calculating a new hypothesis based on the new weights from the previous iteration
+(we are starting off with uniform weight distribution). Then the error is calculated
+and used to determine $\alpha$ for the iteration. This $\alpha$ value corresponds
+to correct the hypothesis were.
+\\
+\\
+\noindent Finally we implemented the adaboost\_discriminant function that
+aggregates the hypothesis based on its $\alpha$ value and returnes the resulting
+hypothesis that is created after the other hypthesis has voted on the class.
+\\
+\\
+\noindent Then the hypothesis returned from the adaboost\_discriminant function
+is used to calculate the error and remove the hand once again from the image
+containing both the hand and the book.
+
+\section{Questions}
+
+\begin{enumerate}
+\item Why is the desicion boundary smoother for the classifier that has not been
+boosted?
+
+This is because of how boosting works in that it uses several classifiers which
+then votes on the class and this is then weighted by the $\alpha$. This makes
+for a more discrete look on the desicion boundary as shown in the lecture slides
+from lecture 6.
+\end{enumerate}
 \end{document}
