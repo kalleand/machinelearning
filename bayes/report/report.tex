@@ -1,0 +1,53 @@
+\documentclass[a4paper]{article}
+
+%\usepackage[cm]{fullpage}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+\usepackage{textcomp}
+\usepackage{multirow}
+\usepackage{float}
+\usepackage{fancyhdr}
+\usepackage{pdfpages}
+
+\usepackage{graphicx}
+\usepackage{amsmath}
+
+\title{Bayes Classifier and Boosting}
+\author{Karl Johan Andreasson <{kalleand@kth.se}> %
+\and Christian Wemstad <{wemstad@kth.se}> %
+}
+
+\fancyhf{}
+\fancyhead[LE,RO]{\slshape \rightmark}
+\fancyhead[LO,RE]{\slshape \leftmark}
+\fancyfoot[C]{\thepage}
+
+\begin{document}
+\thispagestyle{empty}
+\maketitle
+\thispagestyle{empty}
+\pagestyle{empty}
+%\newpage
+%\tableofcontents
+\newpage
+\pagestyle{fancy}
+\setcounter{page}{1}
+\section{Bayes' Rule}
+$P(h|D) = P(D|h)P(h)/P(D)$
+\\ where h is the hypothesis and D is the data set.
+$P(h|D)$ then means the posterior, given D what we know about h.
+$P(h)$ is the prior, the prior knowledge of h.
+$P(D|h)$ is the likelihood.
+$P(D)$ is the evidence.
+\\
+\\
+\noindent What we here are caluclating is the $^hMAP$,
+i.e. the hypotesis that maximizes the posterior.
+
+\section{Assignment 1}
+See pictures. 
+\section{Assignment 2}
+
+\section{Assingment 3}
+
+\end{document}
