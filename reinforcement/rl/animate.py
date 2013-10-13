@@ -32,3 +32,4 @@ def draw(stateSequence):
     wrap.pack()
     root.after(10, do_animation, 0)
     root.mainloop()
+    

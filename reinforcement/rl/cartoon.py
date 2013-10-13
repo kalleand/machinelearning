@@ -1,7 +1,9 @@
 import numpy
 import pylab
 
-test = (0, 1, 3, 2, 5, 2)
+#test = (0, 1, 3, 2, 5, 2, 1)
+# Best solution! Cause brains.
+test = (12, 13, 1, 2, 3, 7, 4, 8, 12)
 
 images = (pylab.imread('step1.png'),
           pylab.imread('step2.png'),
