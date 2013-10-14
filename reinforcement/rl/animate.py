@@ -16,7 +16,7 @@ def do_animation(currentframe):
                 do_image()
                 wrap.update_idletasks()
         currentframe = currentframe + 1
-        root.after(1000, do_animation, currentframe)
+        root.after(400, do_animation, currentframe)
 
 def draw(stateSequence):
     global wrap,frame,root

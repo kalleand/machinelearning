@@ -145,7 +145,7 @@ def calculate_route(T, n, gamma, env, s, epsilon):
 def main():
     # Get the variables used to do reinforcement learning
     gamma = 0.7
-    T = 1000000
+    T = 10000
     epsilon = 0.2
     s = 12
     n = 0.1
